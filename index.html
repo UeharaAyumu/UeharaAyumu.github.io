@@ -1,159 +1,355 @@
-<!DOCTYPE HTML>
-<!--
-	Big Picture by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Big Picture by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+﻿<!DOCTYPE html>
+<html lang="zh">
 
-		<!-- Header -->
-			<header id="header">
-				<h1>Big Picture</h1>
-				<nav>
-					<ul>
-						<li><a href="#intro">Intro</a></li>
-						<li><a href="#one">What I Do</a></li>
-						<li><a href="#two">Who I Am</a></li>
-						<li><a href="#work">My Work</a></li>
-						<li><a href="#contact">Contact</a></li>
-					</ul>
-				</nav>
-			</header>
+<head>
+	<meta charset="utf-8">
+	<title>高咲侑</title>
+	<meta name="viewport" content="width=device-width,initial-scale=0.7,maximum-scale=1.0,user-scalable=no">
+	<meta name="apple-mobile-app-capable" content="yes">
+	<meta name="apple-mobile-app-status-bar-style" content="black">
+	<meta name="description" content="虹咲学园偶像同好会，单推DD">
+	<meta name="keywords"
+		content="高咲侑,虹咲学园偶像同好会，上原步梦我单推，17">
+	<meta name="application-name" content="Sakura & Erii">
 
-		<!-- Intro -->
-			<section id="intro" class="main style1 dark fullscreen">
-				<div class="content">
-					<header>
-						<h2>Hey.</h2>
-					</header>
-					<p>Welcome to <strong>Big Picture</strong> a responsive site template designed by <a href="https://html5up.net">HTML5 UP</a><br />
-					and released for free under the <a href="https://html5up.net/license">Creative Commons Attribution license</a>.</p>
-					<footer>
-						<a href="#one" class="button style2 down">More</a>
-					</footer>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="css/about.css">
+	<link rel="stylesheet" type="text/css" href="css/process.css">
+	<link rel="stylesheet" href="css/mp/mplayer.css">
+	<script src="js/jquery-3.0.0.js"></script>
+	<script src="js/project.js"></script>
+	<script src="js/zzbaidu.js"></script>
+</head>
+
+<body onload="loaddone()">
+	<header class="head">
+
+		<div class="head_logo_div">
+			<img class="logo_img" src="images/pic/head.jpg">
+		</div>
+		<div class="head_nav_div">
+			<nav class="head_nav">
+				<ul id="nav_ul">
+					<li class="nav_li_on nav_ul_li">Home</li>
+					<li class="nav_ul_li">Schedule</li>
+					<li class="nav_ul_li">Experience</li>
+					<li class="nav_ul_li">Hobby</li>
+					<li class="nav_ul_li">Contact</li>
+					<li id="huam"></li>
+				</ul>
+			</nav>
+		</div>
+		<div class="clear"></div>
+	</header>
+	<ul class="float_btn" id="float_btn">
+		<li class="btn_on"></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<div id="arrow_img" class="arrow_div">
+		<img class="arrow_img" src="images/icon/arrowhead.png">
+	</div>
+	<div class="wrapBox" id="wrapBox" style="top:0px;">
+		<div class="box bg01" id="box">
+			<div class="box01_content">
+				<div id="cycle_item" class="cycle_item">
+					<a href="https://github.com/MoeWhite19" class="cycle_a" id="item_1" target="_blank">
+						<span class="cycle_icon_1"></span>
+						<span class="cycle_text">
+							<p class="item_name">GitHub</p>
+						</span>
+					</a>
+					<a href="null" class="cycle_a" id="item_2" target="_blank">
+						<span class="cycle_icon_2"></span>
+						<span class="cycle_text">
+							<p class="item_name">微博</p>
+						</span>
+					</a>
+					<a href="http://blog.whiteg.cn" class="cycle_a" id="item_3" target="_blank">
+						<span class="cycle_icon_3"></span>
+						<span class="cycle_text">
+							<p class="item_name"> 博客</p>
+						</span>
+					</a>
+					<svg version="1.1" baseProfile="tiny" x="0px" y="0px" width="260px" height="260px"
+						viewBox="0 0 260 260" xml:space="preserve" class="green_cycle_img">
+						<path fill="none" stroke="#009245" stroke-width="2" stroke-miterlimit="10" d="M259.207,129.953c0,71.244-57.755,129-129,129
+	s-129-57.756-129-129c0-71.245,57.755-129,129-129"></path>
+					</svg>
+					<svg class="yellow_cycle_img" version="1.1" baseProfile="tiny" x="0px" y="0px" width="240px"
+						height="240px" viewBox="0 0 240 240" xml:space="preserve">
+						<path fill="none" stroke="#FFFF00" stroke-width="2" stroke-miterlimit="10" d="M1.344,120.055c0-65.722,53.278-119,119-119
+	c65.723,0,119,53.278,119,119s-53.277,119-119,119"></path>
+					</svg>
+					<svg class="blue_cycle_img" version="1.1" x="0px" y="0px" width="220px" height="220px"
+						viewBox="0 0 220 220" enable-background="new 0 0 220 220" xml:space="preserve">
+						<path fill="none" stroke="#0000FF" stroke-width="2" stroke-miterlimit="10"
+							d="M110.273,218.98c-60.199,0-109-48.802-109-109"></path>
+						<path fill="none" stroke="#0000FF" stroke-width="2" stroke-miterlimit="10" d="M219.273,109.98">
+						</path>
+						<path fill="#FFFFFF" stroke="#0000FF" stroke-width="2" stroke-miterlimit="10" d="M110.273,0.98">
+						</path>
+					</svg>
+
+					<img id="head" onclick="headclick()" class="head_img" src="images/pic/head.jpg">
 				</div>
-			</section>
-
-		<!-- One -->
-			<section id="one" class="main style2 right dark fullscreen">
-				<div class="content box style2">
-					<header>
-						<h2>What I Do</h2>
-					</header>
-					<p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-					Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
-					id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+				<h1 class="title">高咲侑</h1>
+				<h2 class="title_h2">あなたちゃん</h2>
+				<div id="box01_text">
+					<p></p>
+					<p>上原歩夢の幼なじみ</p>
+					<p>ヒトリダケナンテエラべナイヨー！</p>
 				</div>
-				<a href="#two" class="button style2 down anchored">Next</a>
-			</section>
+			</div>
+		</div>
 
-		<!-- Two -->
-			<section id="two" class="main style2 left dark fullscreen">
-				<div class="content box style2">
-					<header>
-						<h2>Who I Am</h2>
-					</header>
-					<p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-					Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
-					id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+		<div class="box bg02">
+			<div class="box_content box02_content ">
+				<div id='bar_container' class="bar_container">
+					<div class='bar mint' data-percent='80' data-skill='JavaScript'></div>
+					<div class='bar orange' data-percent='70' data-skill='MYSQL'></div>
+					<div class="bar gray" data-percent='65' data-skill='PHP'></div>
+					<div class='bar lila' data-percent='60' data-skill='C'></div>
+					<div class='bar red' data-percent='60' data-skill='PYTHON'></div>
+					<div class="bar moe" data-percent='20' data-skill='UE4(蓝图)'></div>
 				</div>
-				<a href="#work" class="button style2 down anchored">Next</a>
-			</section>
+				<div id="box02_text">
+					<h1>编程语言熟练度</h1>
+					<div class="overline"></div>
+					<p>我总是忍不住回想起那座城市的夜晚</p>
+					<p></p> <!-- 留空段落达到延迟效果 -->
+					<p>灯火燃成的篝火</p>
+					<p>我坐在天台上时光短促又漫长</p>
+					<p>风从我的耳边流过带来整个世界的声音</p>
+					<p></p>
+					<p>风中</p>
+					<p></p>
+					<p>有人弹唱</p>
+					<p></p>
+					<p>有人舞蹈</p>
+					<p></p>
+					<p>有人相爱 </p>
+				</div>
+				<div class="clear"></div>
+			</div>
 
-		<!-- Work -->
-			<section id="work" class="main style3 primary">
-				<div class="content">
-					<header>
-						<h2>My Work</h2>
-						<p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-						Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis
-						arcu, id varius justo euismod in. Curabitur egestas consectetur magna vitae.</p>
-					</header>
+		</div>
 
-					<!-- Gallery  -->
-						<div class="gallery">
-							<article class="from-left">
-								<a href="images/fulls/01.jpg" class="image fit"><img src="images/thumbs/01.jpg" title="The Anonymous Red" alt="" /></a>
-							</article>
-							<article class="from-right">
-								<a href="images/fulls/02.jpg" class="image fit"><img src="images/thumbs/02.jpg" title="Airchitecture II" alt="" /></a>
-							</article>
-							<article class="from-left">
-								<a href="images/fulls/03.jpg" class="image fit"><img src="images/thumbs/03.jpg" title="Air Lounge" alt="" /></a>
-							</article>
-							<article class="from-right">
-								<a href="images/fulls/04.jpg" class="image fit"><img src="images/thumbs/04.jpg" title="Carry on" alt="" /></a>
-							</article>
-							<article class="from-left">
-								<a href="images/fulls/05.jpg" class="image fit"><img src="images/thumbs/05.jpg" title="The sparkling shell" alt="" /></a>
-							</article>
-							<article class="from-right">
-								<a href="images/fulls/06.jpg" class="image fit"><img src="images/thumbs/06.jpg" title="Bent IX" alt="" /></a>
-							</article>
+		<div class="box bg03">
+
+			<div class="box_content box03_content">
+				<ul id="timeUl" class="timeUl">
+					<li>
+						<div>
+							<h1>04.24</h1>
+							<p>和Sakura去东京天空树，</p>
+							<p>世界上最暖和的地方，</p>
+							<p>在天空树的顶上。</p>
 						</div>
+					</li>
 
-				</div>
-			</section>
+					<li>
+						<div>
+							<h1>04.26</h1>
+							<p>和Sakura去明治神宫，</p>
+							<p>有人在那里举办婚礼。</p>
+						</div>
+					</li>
 
-		<!-- Contact -->
-			<section id="contact" class="main style3 secondary">
-				<div class="content">
-					<header>
-						<h2>Say Hello.</h2>
-						<p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.</p>
-					</header>
-					<div class="box">
-						<form method="post" action="#">
-							<div class="fields">
-								<div class="field half"><input type="text" name="name" placeholder="Name" /></div>
-								<div class="field half"><input type="email" name="email" placeholder="Email" /></div>
-								<div class="field"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
-							</div>
-							<ul class="actions special">
-								<li><input type="submit" value="Send Message" /></li>
-							</ul>
-						</form>
+					<li>
+						<div>
+							<h1>04.25</h1>
+							<p>和Sakura去迪士尼，</p>
+							<p>鬼屋很可怕，</p>
+							<p>但是有Sakura在，</p>
+							<p>所以不可怕。</p>
+						</div>
+					</li>
+
+					<li>
+						<div>
+							<br />
+							<h1>E.N.D</h1>
+							<p>Sakura</p>
+							<p>最好了</p>
+							<p name="play_music" style="cursor: pointer" onclick="player.play(0,0)"> BGM: <u>最后的旅行</u>
+							</p>
+						</div>
+					</li>
+
+					<li>
+						<div>
+							<br />
+							<h1>世界很温柔.....</h1>
+							<h1>我很喜欢这样的世界</h1>
+							<h1>但他不喜欢我</h1>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+
+			<div class="left_div" id="left_div">
+				<img class="left_arrow" src="images/icon/arrowleft.png">
+			</div>
+			<div class="right_div" id="right_div">
+				<img class="right_arrow" src="images/icon/arrowright.png">
+			</div>
+		</div>
+
+		<div class="box bg04">
+			<div class="box_content box04_content">
+				<h1 class="box04_title">Something Of Hobby</h1>
+				<ul class="bq">
+					<li>
+						<a href="#">
+							<br />
+							<h2>世界好大啊</h2>
+							<h2>原来外面的时间</h2>
+							<h2>是这个这样子啊</h2>
+							<!--<p>Text Content #1</p>-->
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<!-- 测试矢量图 -->
+							<svg id="outSvg" viewBox="0 0 512 384" version="1.1" xmlns="http://www.w3.org/2000/svg" l>
+								<path fill="#000000" opacity="1.00"
+									d=" M 0.00 0.00 L 512.00 0.00 L 512.00 384.00 L 0.00 384.00 L 0.00 0.00 Z"></path>
+								<path fill="#FFFFFF" opacity="1.00"
+									d=" M 0.00 0.00 L 512.00 0.00 L 512.00 384.00 L 0.00 34.00 L 0.00 0.00 Z"></path>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #3</h2>
+							<p>Text Content #3</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #4</h2>
+							<p>Text Content #4</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #5</h2>
+							<p>Text Content #5</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #6</h2>
+							<p>Text Content #6</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #2</h2>
+							<p>Text Content #2</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #7</h2>
+							<p>Text Content #7</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h2>Title #8</h2>
+							<p>Text Content #8</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<foot id="foot" class="foot">
+			<h1 class="foot_title">Contact With Me</h1>
+			<div class="foot_info_main">
+				<ul>
+					<li class="uname1_items">
+						<a href="http://music.163.com/#/user/home?id=40632376" target="_blank">歌单</a>
+					</li>
+					<li class="qie_items">
+						<a href="http://whiteg.cn/jump/qq.html" target="_blank">企鹅</a>
+					</li>
+					<li class="pan_items">
+						<a href="http://yun.whiteg.cn" target="_blank">私云</a>
+					</li>
+					<li class="email_items">
+						<a href="mailto:MoeWhite19@163.com" target="_blank">邮箱</a>
+					</li>
+				</ul>
+			</div>
+			<div class="foot_power">
+				<h3>©2020-2021 Powered by
+					<p title="Thanks" target="_blank"><a href='https://github.com/UeharaAyumu'>UeharaAyumu</a> | <a title="你想干什么？"
+							href="http://whiteg.cn">上原步梦</a></p>
+					<p title="2021-4-13 16:58:19" name="show_time" style="cursor: progress;">时间</p>
+					<!--a href="http://www.miitbeian.gov.cn/" title="beian" target="_blank">沪ICP备*******号</a-->
+				</h3>
+			</div>
+		</foot>
+	</div>
+	<div class="mp" id='mpi'>
+		<div class="mp-box">
+			<img src="images/mp/mplayer_error.png" alt="music cover" class="mp-cover">
+			<div class="mp-info">
+				<p class="mp-name">名字</p>
+				<p class="mp-singer">歌手</p>
+				<p><span class="mp-time-current">00:00</span>/<span class="mp-time-all">00:00</span></p>
+			</div>
+			<div class="mp-btn">
+				<button class="mp-prev" title="上一首"></button>
+				<button class="mp-pause" title="播放"></button>
+				<button class="mp-next" title="下一首"></button>
+				<button class="mp-mode" title="播放模式"></button>
+				<div class="mp-vol">
+					<button class="mp-vol-img" title="静音"></button>
+					<div class="mp-vol-range" data-range_min="0" data-range_max="100" data-cur_min="80">
+						<div class="mp-vol-current"></div>
+						<div class="mp-vol-circle"></div>
 					</div>
 				</div>
-			</section>
+			</div>
+			<div class="mp-pro">
+				<div class="mp-pro-current"></div>
+			</div>
+			<div class="mp-menu">
+				<button class="mp-list-toggle"></button>
+				<button class="mp-lrc-toggle"></button>
+			</div>
+		</div>
+		<div class="mp-lrc-box">
+			<ul class="mp-lrc"></ul>
+			<button class="mp-lrc-close"></button>
+		</div>
+		<button id="mp-toggle" class="mp-toggle">
+			<span class="mp-toggle-img"></span>
+		</button>
+		<div class="mp-list-box">
+			<ul class="mp-list-title"></ul>
+			<table class="mp-list-table">
+				<thead>
+					<tr>
+						<th>歌名</th>
+						<th>歌手</th>
+						<th>时长</th>
+					</tr>
+				</thead>
+				<tbody class="mp-list"></tbody>
+			</table>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/about.js"></script>
+	<script src="js/mp/mplayer.js"></script>
+	<script src="js/mp/mplayer-list.js"></script>
+	<script src="js/mp/jquery.nstSlider.min.js"></script>
+	<script src="js/mp/mplayer-main.js"></script>
+</body>
 
-		<!-- Footer -->
-			<footer id="footer">
-
-				<!-- Icons -->
-					<ul class="icons">
-						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-						<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-						<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
-					</ul>
-
-				<!-- Menu -->
-					<ul class="menu">
-						<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-					</ul>
-
-			</footer>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.poptrox.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
 </html>
