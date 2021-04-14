@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.cnblogs.com/chenyoumei/p/10510321.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta name="description" content="问题：当前市场上手机屏幕宽度不尽相同，常见有320px（ipone5）、375px（ipone678）等等，而为了在不同宽度的手机屏幕上良好现显示网页，我们需要解决方案。 原理：当前前端解决手机屏幕自">
+    <meta property="og:description" content="问题：当前市场上手机屏幕宽度不尽相同，常见有320px（ipone5）、375px（ipone678）等等，而为了在不同宽度的手机屏幕上良好现显示网页，我们需要解决方案。 原理：当前前端解决手机屏幕自">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="https://common.cnblogs.com/favicon.svg" type="image/svg+xml">
+    
+    <link rel="stylesheet" href="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/bundle-autumn.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/bundle-autumn-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/chenyoumei/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/chenyoumei/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/chenyoumei/wlwmanifest.xml">
+    <script src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/osd.js.下载"></script><script async="" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/encoder.js.下载"></script><script>
+        var currentBlogId = 376906;
+        var currentBlogApp = 'chenyoumei';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'Autumn';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2019-03-11 02:16';
+        </script>
+    <script src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/blog-common.min.js.下载"></script><style type="text/css">.medium-zoom-overlay{position:fixed;top:0;right:0;bottom:0;left:0;opacity:0;transition:opacity .3s;will-change:opacity}.medium-zoom--opened .medium-zoom-overlay{cursor:pointer;cursor:zoom-out;opacity:1}.medium-zoom-image{cursor:pointer;cursor:zoom-in;transition:transform .3s cubic-bezier(.2,0,.2,1)!important}.medium-zoom-image--hidden{visibility:hidden}.medium-zoom-image--opened{position:relative;cursor:pointer;cursor:zoom-out;will-change:transform}</style>
+    
+    
+    
+<meta http-equiv="origin-trial" content="A+b/H0b8RPXNaJgaNFpO0YOFuGK6myDQXlwnJB3SwzvNMfcndat4DZYMrP4ClJIzYWo3/yP2S+8FTZ/lpqbPAAEAAABueyJvcmlnaW4iOiJodHRwczovL2ltYXNkay5nb29nbGVhcGlzLmNvbTo0NDMiLCJmZWF0dXJlIjoiVHJ1c3RUb2tlbnMiLCJleHBpcnkiOjE2MjYyMjA3OTksImlzVGhpcmRQYXJ0eSI6dHJ1ZX0="><meta http-equiv="origin-trial" content="A9ZgbRtm4pU3oZiuNzOsKcC8ppFSZdcjP2qYcdQrFKVzkmiWH1kdYY1Mi9x7G8+PS8HV9Ha9Cz0gaMdKsiVZIgMAAAB7eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiVHJ1c3RUb2tlbnMiLCJleHBpcnkiOjE2MjYyMjA3OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="AxL6oBxcpn5rQDPKSAs+d0oxNyJYq2/4esBUh3Yx5z8QfcLu+AU8iFCXYRcr/CEEfDnkxxLTsvXPJFQBxHfvkgMAAACBeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXRhZ3NlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiVHJ1c3RUb2tlbnMiLCJleHBpcnkiOjE2MjYyMjA3OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A9KPtG5kl3oLTk21xqynDPGQ5t18bSOpwt0w6kGa6dEWbuwjpffmdUpR3W+faZDubGT+KIk2do0BX2ca16x8qAcAAACBeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiVHJ1c3RUb2tlbnMiLCJleHBpcnkiOjE2MjYyMjA3OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A3HucHUo1oW9s+9kIKz8mLkbcmdaj5lxt3eiIMp1Nh49dkkBlg1Fhg4Fd/r0vL69mRRA36YutI9P/lJUfL8csQoAAACFeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiQ29udmVyc2lvbk1lYXN1cmVtZW50IiwiZXhwaXJ5IjoxNjI2MjIwNzk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A0OysezhLoCRYomumeYlubLurZTCmsjTb087OvtCy95jNM65cfEsbajrJnhaGwiTxhz38ZZbm+UhUwQuXfVPTg0AAACLeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiQ29udmVyc2lvbk1lYXN1cmVtZW50IiwiZXhwaXJ5IjoxNjI2MjIwNzk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="AxoOxdZQmIoA1WeAPDixRAeWDdgs7ZtVFfH2y19ziTgD1iaHE5ZGz2UdSjubkWvob9C5PrjUfkWi4ZSLgWk3Xg8AAACLeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXRhZ3NlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiQ29udmVyc2lvbk1lYXN1cmVtZW50IiwiZXhwaXJ5IjoxNjI2MjIwNzk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A7+rMYR5onPnACrz+niKSeFdH3xw1IyHo2AZSHmxrofRk9w4HcQPMYcpBUKu6OQ6zsdxf4m/vqa6tG6Na4OLpAQAAAB4eyJvcmlnaW4iOiJodHRwczovL2ltYXNkay5nb29nbGVhcGlzLmNvbTo0NDMiLCJmZWF0dXJlIjoiQ29udmVyc2lvbk1lYXN1cmVtZW50IiwiZXhwaXJ5IjoxNjI2MjIwNzk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><script src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/pubads_impl_2021040804.js.下载" async=""></script><link rel="preload" href="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/f.txt"></script><link rel="prefetch" href="https://94fa9e3e91ab8cdaf3132b8e68a04052.safeframe.googlesyndication.com/safeframe/1-0-38/html/container.html"><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-38/html/container.html"></head>
+<body class="has-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/logo.svg" alt="博客园Logo"></a></li>
+                <li><a href="https://www.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-sitehome&#39;)">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-news&#39;)">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-q&#39;)">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-brands&#39;)">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-ing&#39;)">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-edu&#39;)">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3">
+                        <button type="submit" id="zzk_search_button">
+                            <img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/search.svg" alt="搜索">
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: none;">
+                        <img id="new_post_icon" class="navbar-icon" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客" style="display: none;">
+                        <img id="myblog_icon" class="navbar-icon" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: none;">
+                        <img id="msg_icon" class="navbar-icon" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: none;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/avatar-default.svg" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/lite-mode-check.svg" class="hide"><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/" style="display: inline;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: inline;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <table id="blog_header" cellspacing="0" cellpadding="0" border="0" class="banner">
+    <tbody><tr>
+        <td width="61">
+            &nbsp;
+        </td>
+        <td width="236" align="center">
+            
+<br><br><br><br><br><br><br>
+<div id="header">
+	<span>
+		<a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/chenyoumei/">陈由梅</a>
+<br><br>
+		
+	</span>
+</div>
+
+
+        </td>
+        <td style="padding-bottom: 30px" align="center" valign="bottom">
+            &nbsp;
+        </td>
+    </tr>
+</tbody></table>
+<table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tbody><tr>
+        <td width="60">
+            &nbsp;
+        </td>
+        <td id="sidebar" valign="top" s="">
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white">
+                <tbody><tr>
+                    <td class="banner" valign="top" style="padding-top: 0px">
+
+                        <div id="sidebar_news" class="newsItem"><div class="news">
+<div id="blog-news">
+    
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/chenyoumei/">
+            陈由梅
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/chenyoumei/" title="入园时间：2017-08-28">
+            3年7个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/chenyoumei/followers/">
+            4
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/chenyoumei/followees/">
+            1
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;ec9b62e4-124c-4b4b-9905-08d49c352df3&#39;)">+加关注</a></div>
+        <script>getFollowStatus('ec9b62e4-124c-4b4b-9905-08d49c352df3');</script>
+    </div>
+</div></div>
+
+</div>
+<div id="sidebar_c3"></div>
+                        <div id="blog-sidecolumn"><!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+    
+<li><a href="https://www.cnblogs.com/chenyoumei/p/" title="我的博客的随笔列表">我的随笔</a></li>
+<li><a href="https://www.cnblogs.com/chenyoumei/MyComments.html" title="我的发表过的评论列表">我的评论</a></li>
+<li><a href="https://www.cnblogs.com/chenyoumei/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li>
+<li><a href="https://www.cnblogs.com/chenyoumei/RecentComments.html" title="我的博客的评论列表">最新评论</a></li>
+<li><a href="https://www.cnblogs.com/chenyoumei/tag/" title="我的博客的标签列表">我的标签</a></li>
+
+</ul>
+</div>
+
+<!-- 最新随笔 -->
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+<h3>我的标签</h3>
+<div id="MyTag">
+    <ul>
+                <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/js/">js<span class="tag-count">(4)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/php/">php<span class="tag-count">(3)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/jquery/">jquery<span class="tag-count">(3)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E5%AE%9A%E6%97%B6%E5%99%A8/">定时器<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7/">微信公众号<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9/">微信公众号图片压缩<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/angular/">angular<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/angular%E8%BE%93%E5%85%A5%E6%95%B0%E5%AD%97%E5%87%BA%E9%94%99/">angular输入数字出错<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%87%AA%E9%80%82%E5%BA%94/">移动端自适应<span class="tag-count">(1)</span></a>
+        </li>
+    <li>
+        <a href="https://www.cnblogs.com/chenyoumei/tag/">更多</a>
+    </li>
+
+    </ul>
+</div>
+</div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+
+    <h1 class="listtitle">
+        
+随笔档案
+
+
+
+    </h1>
+    <ul class="list">
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2021/01.html" rel="" target="">
+    2021年1月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2020/09.html" rel="" target="">
+    2020年9月(4)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2020/06.html" rel="" target="">
+    2020年6月(3)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2020/05.html" rel="" target="">
+    2020年5月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2020/04.html" rel="" target="">
+    2020年4月(3)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2020/01.html" rel="" target="">
+    2020年1月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2019/12.html" rel="" target="">
+    2019年12月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2019/10.html" rel="" target="">
+    2019年10月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2019/03.html" rel="" target="">
+    2019年3月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/08.html" rel="" target="">
+    2018年8月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/07.html" rel="" target="">
+    2018年7月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/06.html" rel="" target="">
+    2018年6月(2)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/05.html" rel="" target="">
+    2018年5月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/03.html" rel="" target="">
+    2018年3月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/02.html" rel="" target="">
+    2018年2月(1)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="false" style="display: none">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2018/01.html" rel="" target="">
+    2018年1月(2)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="false" style="display: none">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2017/12.html" rel="" target="">
+    2017年12月(4)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="false" style="display: none">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2017/09.html" rel="" target="">
+    2017年9月(2)
+</a>
+ 
+
+            </li>
+            <li class="listitem" data-category-list-item-visible="false" style="display: none">
+                
+<a href="https://www.cnblogs.com/chenyoumei/archive/2017/08.html" rel="" target="">
+    2017年8月(2)
+</a>
+ 
+
+            </li>
+        <li class="listitem"><a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a></li>
+    </ul>
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block"></div>
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">阅读排行榜</h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/chenyoumei/p/9156849.html">
+                            1. 浏览器渲染页面的原理及流程(14986)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/chenyoumei/p/10510321.html">
+                            2. 移动端屏幕宽度自适应原理及实现(14300)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/chenyoumei/p/8195031.html">
+                            3. php用户名正则验证(13286)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/chenyoumei/p/8117925.html">
+                            4. SQL注入攻击(6273)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/chenyoumei/p/12695381.html">
+                            5. js设置定时器和清除定时器(4708)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div></div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block"></div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/chenyoumei/p/9156849.html">
+                                1. 浏览器渲染页面的原理及流程(4)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/chenyoumei/p/12777863.html">
+                                2. 拿到别人的vue项目如何跑起来？(2)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/chenyoumei/p/9488596.html">
+                                3. js获取用户当前地理位置（省、市、经纬度）(1)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/chenyoumei/p/8195031.html">
+                                4. php用户名正则验证(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div></div></div>
+                        <script>loadBlogSideColumn();</script>
+
+                        <br>
+                        <center>
+                            Powered by <a href="http://www.cnblogs.com/">博客园</a>
+                        </center>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+        <td valign="top" style="padding: 0">
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white" class="index">
+                <tbody><tr>
+                    <td class="banner" valign="top">
+                        <center>
+                            
+<a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+ <span id="sitehome_link_split">|</span> 
+
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/chenyoumei/">
+首页</a>
+ <span id="bloghome_link_split">|</span> 
+
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+ <span id="newpost_link_split">|</span> 
+<!--<asp:HyperLink  Runat="server" CssClass="menu" NavigateUrl="/EnterMyBlog.aspx?NewArticle=1" Text="发新文章" ID="NewArticleLink" /> | -->
+
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E9%99%88%E7%94%B1%E6%A2%85">
+联系</a> <span id="contact_link_split">|</span>  
+
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/chenyoumei/rss/">
+订阅</a>
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/chenyoumei/rss/">
+    <img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/xml.gif" alt="订阅">
+</a> <span id="rss_link_split">|</span> 
+
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+
+
+
+                        </center>
+                        <div id="post_detail">
+    <div class="block">
+        <h1 class="block_title">
+            
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chenyoumei/p/10510321.html">
+    <span>移动端屏幕宽度自适应原理及实现</span>
+    
+
+
+
+</a>
+
+        </h1>
+        <div class="post">
+            <div class="postcontent">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>问题：</strong>当前市场上手机屏幕宽度不尽相同，常见有320px（ipone5）、375px（ipone678）等等，而为了在不同宽度的手机屏幕上良好现显示网页，我们需要解决方案。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>原理：</strong>当前前端解决手机屏幕自适应的手段极多，究其原理，主要分为两大版块：</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>一、</strong>使用百分比长度单位，当前百分比长度单位一般如下：vw、vh、vm、em、rem、%，<strong>优点：</strong>一套css代码即可适应所有屏幕宽度不同的手机；</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>二、</strong>使用固定长度单位px，再使用js根据当前屏幕宽度与固定宽度计算比例，进行网页缩放。<strong>优点：</strong>网页宽度恒定，便于计算</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>实现：</strong></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>　　<strong>一、</strong>使用百分比宽度单位实现移动端屏幕自适应</strong></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>　　</strong>我们来聊聊这些百分比长度单位的<strong>定义</strong>及<strong>优缺点</strong>。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>vw：</strong>相对于视口的宽度，视口被均分为100单位的vw；即将当前屏幕宽度均分为100份，1vw即为当前屏幕宽度的1%；<strong>优点：</strong>vw单位长度准确分明，<strong>常用此单位，推荐使用此单位</strong>。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>vh：</strong>相对于视口的高度，视口被均分为100单位的vh；即将当前屏幕高度均分为100份，1vh即为当前屏幕高度的1%；<strong>基本不用此单位，</strong>它的优点vw都有，但是它有一个<strong>致命的缺点</strong>：手机屏幕高度分成100份后，不是便于计算的数字，譬如iphone5屏幕高568px，此时1vh=5.68px；iphone678屏幕高667px，此时1vh=6.67px；若设计稿一个div宽高皆为100px，你能口算出它的宽高为多少vh吗？我们不可能带着计算器写代码。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>vm：</strong>相对于视口的宽度或高度，取决于哪个更小，视口宽度或高度中更小的那个被均分为100单位的vm；即将当前屏幕宽度或高度均分为100份，1vm即为当前屏幕宽度或高度的1%；它的优点vw都有，也曾见有人使用此单位，但我觉得<strong>vw比它更好</strong>。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>em：</strong>相对长度单位。相对于当前对象内文本的字体尺寸。如当前对行内文本的字体尺寸未被人为设置，则相对于上一个父元素的默认字体尺寸。举例而言，浏览器默认字体大小为16px，在css中设置</span></p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_912482" class="syntaxhighlighter  css"><div class="toolbar"><span><a href="https://www.cnblogs.com/chenyoumei/p/10510321.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="css plain">html{</code><code class="css keyword">font-size</code><code class="css plain">:</code><code class="css value">15px</code><code class="css plain">;}</code></div><div class="line number2 index1 alt1"><code class="css plain">body{</code><code class="css keyword">font-size</code><code class="css plain">:</code><code class="css value">14px</code><code class="css plain">;}</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p><span style="color: rgba(0, 0, 0, 1)">　　em将优先使用自身的字体大小，若自身没有设置字体大小，将继承上一个父元素的字体大小，此时没有为当前标签设置字体样式，于是继承body的字体大小，而不是继承html的字体大小，即1em=14px;此单位若要用于屏幕自适应，需与vw配合使用设置父元素的字体大小。于css中进行字体设置譬如：font-size1:4vw;，方可实现屏幕自适应。<strong>基本不用此单位，</strong>它的优点rem都有，但它是优先使用自身的字体大小，其次继承上一个父元素的字体大小，而<strong>我们在使用标签时，经常需要给标签设置字体样式，将导致em的根元素字体尺寸不定</strong>，使用起来十分麻烦。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　举例如下所示：</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/1227776-20190311141623177-1468627949.png" alt=""></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　在w3c等教学网站中，他们使用px单位作为em单位的根单位，但是<strong>使用px做根单位的em单位是无法实现移动端屏幕自适应的</strong>。在移动端中，<strong>不推荐将px作为em的根单位</strong>。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>rem：</strong>相对长度单位，相对于根元素(即html元素)内文本的字体尺寸。rem继承且只继承html标签的字体大小。同样的，此单位若要用于屏幕自适应，需与vw配合使用设置根元素的字体大小。必须在css中进行字体设置：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">html{font-size:4vw;}</span></pre>
+</div>
+<p><span style="color: rgba(0, 0, 0, 1)">，方可实现屏幕自适应。<span style="color: rgba(255, 0, 0, 1)"><strong>常用此单位，推荐使用此单位。</strong></span>看到这里，相信很多朋友都会感到疑惑，明明直接使用vw单位即可实现自适应，为何要使用vw单位进行设置后来使用rem单位呢？原因很简单：<strong>便于计算</strong>。首先，设计师设计的移动端设计稿通常使用750px宽度（契合iphone678的屏幕宽度），前端工程师通常使用375px的网页宽度（在所有手机屏幕宽度中，它是最方便计算的宽度）。此时，1vw=3.75px；而4vw=15px；8vw=30px；那么请问，哪个单位更便于计算？由于30px与375px相除并非整数，我推荐使用15px（即1rem=4vw）。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　当然，这只是我的小技巧，rem单位与vw单位的优先度相差无几，事实上，<strong>使用vw单位的人极多</strong>，也许比使用rem单位的人更多，全看各人喜好。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　也有人使用px作为rem的根单位，再<strong>使用js进行单位缩放，不推荐这样使用</strong>，又不是没有rem单位和vw单位用，缩放单位个鸡儿。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　<strong>%：基本没人用。</strong>原因：<strong>单纯使用%无法确定div的高度</strong>，若使用%，那么必须搭配px等固定长度单位来确定高度，形如</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">.a{
+  width: 20%;
+  height: 20px;    
+}</span></pre>
+</div>
+<p><span style="color: rgba(0, 0, 0, 1)">　　这样的方式，很容易导致图片等变形。</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>　　二、使用固定长度单位px，再使用js根据当前屏幕宽度与固定宽度计算比例，进行网页缩放，来实现移动端屏幕自适应</strong></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">&nbsp;　　这个方法主要需要用到css3的两个属性：transform、<span class="styles-clipboard-only"> <span class="webkit-css-property">transform-origin。<strong>通过transform属性的值scale可以进行网页缩放</strong>，这是根本。另外必须允许网页缩放，否则transform属性会不起作用。</span></span></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　这个手段简单来说，需要先定一个网页宽度（譬如750px），再通过js获取屏幕宽度，屏幕宽度/网页宽度=缩放比例，然后通过js执行缩放（为标签添加transform<span class="styles-clipboard-only">及<span class="webkit-css-property">transform-origin属性</span></span>）。话不多说，直接上代码。</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: rgba(0, 0, 0, 1)">&lt;html&gt;
+&lt;head&gt;
+    &lt;meta content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport"&gt;
+    &lt;style&gt;<span style="background-color: rgba(245, 245, 245, 1)">
+    *</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">margin</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 0</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">padding</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 0</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span><span style="background-color: rgba(245, 245, 245, 1)">
+    #div1</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">width</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 750px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">height</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 600px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">background-color</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> red</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span><span style="background-color: rgba(245, 245, 245, 1)">
+    #div2</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">width</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 375px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">height</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 300px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">background-color</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> green</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span>
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body id="body"&gt;
+    &lt;div id="div1"&gt;
+        &lt;div id="div2"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;script type="text/javascript"&gt;
+<span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">id    需要进行缩放的标签id</span>
+<span style="background-color: rgba(245, 245, 245, 1)">function</span><span style="background-color: rgba(245, 245, 245, 1)"> suofang(id) {
+    </span><span style="background-color: rgba(245, 245, 245, 1)">var</span><span style="background-color: rgba(245, 245, 245, 1)"> num </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">750</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">css中固定的网页宽度</span>
+    <span style="background-color: rgba(245, 245, 245, 1)">var</span><span style="background-color: rgba(245, 245, 245, 1)"> oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)"> window.screen.width;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">获取当前手机屏幕宽度</span>
+    <span style="background-color: rgba(245, 245, 245, 1)">var</span><span style="background-color: rgba(245, 245, 245, 1)"> objId </span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)"> document.getElementById(id);</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">获取传入的id标签对象</span>
+<span style="background-color: rgba(245, 245, 245, 1)">    rate </span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)"> oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">/</span><span style="background-color: rgba(245, 245, 245, 1)"> num;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">缩放比例 = 当前手机屏幕宽度/css中固定的网页宽度</span>
+    <span style="background-color: rgba(245, 245, 245, 1)">if</span><span style="background-color: rgba(245, 245, 245, 1)"> (oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">&lt;</span> <span style="background-color: rgba(245, 245, 245, 1)">1920</span><span style="background-color: rgba(245, 245, 245, 1)">) {
+        objId.style.transformOrigin </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">left top 0px</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        objId.style.transform </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">scale(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span> <span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)"> rate </span><span style="background-color: rgba(245, 245, 245, 1)">+</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">)</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        </span><span style="background-color: rgba(245, 245, 245, 1)">/*</span><span style="background-color: rgba(245, 245, 245, 1)"> IE 9 </span><span style="background-color: rgba(245, 245, 245, 1)">*/</span><span style="background-color: rgba(245, 245, 245, 1)">
+        objId.style.msTransformOrigin </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">left top 0px</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        objId.style.msTransform </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">scale(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span> <span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)"> rate </span><span style="background-color: rgba(245, 245, 245, 1)">+</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">)</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        </span><span style="background-color: rgba(245, 245, 245, 1)">/*</span><span style="background-color: rgba(245, 245, 245, 1)"> Safari and Chrome </span><span style="background-color: rgba(245, 245, 245, 1)">*/</span><span style="background-color: rgba(245, 245, 245, 1)">
+        objId.style.webkitTransformOrigin </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">left top 0px</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        objId.style.webkitTransform </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">scale(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span> <span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)"> rate </span><span style="background-color: rgba(245, 245, 245, 1)">+</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">)</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        </span><span style="background-color: rgba(245, 245, 245, 1)">/*</span><span style="background-color: rgba(245, 245, 245, 1)"> Firefox </span><span style="background-color: rgba(245, 245, 245, 1)">*/</span><span style="background-color: rgba(245, 245, 245, 1)">
+        objId.style.mozTransformOrigin </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">left top 0px</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        objId.style.mozTransform </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">scale(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span> <span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)"> rate </span><span style="background-color: rgba(245, 245, 245, 1)">+</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">)</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        </span><span style="background-color: rgba(245, 245, 245, 1)">/*</span><span style="background-color: rgba(245, 245, 245, 1)"> Opera </span><span style="background-color: rgba(245, 245, 245, 1)">*/</span><span style="background-color: rgba(245, 245, 245, 1)">
+        objId.style.oTransformOrigin </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">left top 0px</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+        objId.style.oTransform </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">scale(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span> <span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)"> rate </span><span style="background-color: rgba(245, 245, 245, 1)">+</span> <span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">)</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;
+    }
+};
+suofang(</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">body</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">);</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">执行缩放</span>
+&lt;/script&gt;
+&lt;/html&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="color: rgba(0, 0, 0, 1)">&nbsp;　　话不再说，直接上效果：</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/1227776-20190311170019376-1238055800.jpg" alt="" class="medium-zoom-image"></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)"><strong>　　事实上，<span style="color: rgba(255, 0, 0, 1)">有更简便的方法来缩放网页</span>，即通过js操纵meta标签中的initial-scale（即网页初始缩放比例）属性即可。</strong>话不多说，直接上代码。</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: rgba(0, 0, 0, 1)">&lt;html&gt;
+&lt;head&gt;
+    &lt;meta content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport"&gt;
+    &lt;style&gt;<span style="background-color: rgba(245, 245, 245, 1)">
+        *</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">margin</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 0</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">padding</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 0</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span><span style="background-color: rgba(245, 245, 245, 1)">
+        #div1</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">width</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 750px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">height</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 600px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">background-color</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> red</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span><span style="background-color: rgba(245, 245, 245, 1)">
+        #div2</span><span style="background-color: rgba(245, 245, 245, 1)">{</span><span style="background-color: rgba(245, 245, 245, 1)">width</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 375px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">height</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> 300px</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">background-color</span><span style="background-color: rgba(245, 245, 245, 1)">:</span><span style="background-color: rgba(245, 245, 245, 1)"> green</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">}</span>
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body id="body"&gt;
+    &lt;div id="div1"&gt;
+        &lt;div id="div2"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;script type="text/javascript"&gt;
+<span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">网页缩放函数</span>
+<span style="background-color: rgba(245, 245, 245, 1)">function</span><span style="background-color: rgba(245, 245, 245, 1)"> suofang() {
+    </span><span style="background-color: rgba(245, 245, 245, 1)">var</span><span style="background-color: rgba(245, 245, 245, 1)"> num </span><span style="background-color: rgba(245, 245, 245, 1)">=</span> <span style="background-color: rgba(245, 245, 245, 1)">750</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">css中固定的网页宽度</span>
+    <span style="background-color: rgba(245, 245, 245, 1)">var</span><span style="background-color: rgba(245, 245, 245, 1)"> oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)"> window.screen.width;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">获取当前手机屏幕宽度</span>
+<span style="background-color: rgba(245, 245, 245, 1)">    rate </span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)"> oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">/</span><span style="background-color: rgba(245, 245, 245, 1)"> num;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">缩放比例 = 当前手机屏幕宽度/css中固定的网页宽度</span>
+    <span style="background-color: rgba(245, 245, 245, 1)">if</span><span style="background-color: rgba(245, 245, 245, 1)"> (oWidth </span><span style="background-color: rgba(245, 245, 245, 1)">&lt;</span> <span style="background-color: rgba(245, 245, 245, 1)">1920</span><span style="background-color: rgba(245, 245, 245, 1)">) {
+        document.getElementsByTagName(</span><span style="background-color: rgba(245, 245, 245, 1)">'</span><span style="background-color: rgba(245, 245, 245, 1)">meta</span><span style="background-color: rgba(245, 245, 245, 1)">'</span><span style="background-color: rgba(245, 245, 245, 1)">)[name</span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">viewport</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">].content</span><span style="background-color: rgba(245, 245, 245, 1)">=</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,width=device-width,height=device-height,initial-scale=</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)">
+        rate</span><span style="background-color: rgba(245, 245, 245, 1)">+</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">,maximum-scale=2.0,user-scalable=no</span><span style="background-color: rgba(245, 245, 245, 1)">"</span><span style="background-color: rgba(245, 245, 245, 1)">;</span><span style="background-color: rgba(245, 245, 245, 1)">//</span><span style="background-color: rgba(245, 245, 245, 1)">修改meta的属性</span>
+<span style="background-color: rgba(245, 245, 245, 1)">    }
+};
+suofang();
+</span>&lt;/script&gt;
+&lt;/html&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="color: rgba(0, 0, 0, 1)">&nbsp;　　话不再说，直接上效果：</span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">&nbsp;　　<img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/1227776-20190311180753120-577467424.jpg" alt="" class="medium-zoom-image"></span></p>
+<p><span style="color: rgba(0, 0, 0, 1)">　　</span>ps：此外，还可以使用媒体适配查询的方法来进行自适应，不过<strong>媒体适配查询这个方法一般用于pc端与移动端适应</strong>。我想应该没人会这么蠢，单纯为了解决移动端自适应而使用它，毕竟为不同宽度手机屏幕的同一个页面的写很多套css实在太蠢了。举例如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">@media screen and (min-width:1281px) and (max-width:1920px) and (orientation:portrait) {
+    html { font-size: 15px; }
+}
+@media screen and (min-width:320px) and (max-width:1280px) and (orientation:portrait) {
+    html { font-size: 73.24%; }
+}</span></pre>
+</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/chenyoumei/tag/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%87%AA%E9%80%82%E5%BA%94/">移动端自适应</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(10510321,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;ec9b62e4-124c-4b4b-9905-08d49c352df3&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/chenyoumei/" target="_blank"><img src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/20200925132016.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/chenyoumei/">陈由梅</a><br>
+            <a href="https://home.cnblogs.com/u/chenyoumei/followees/">关注 - 1</a><br>
+            <a href="https://home.cnblogs.com/u/chenyoumei/followers/">粉丝 - 4</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;ec9b62e4-124c-4b4b-9905-08d49c352df3&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(10510321,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(10510321,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/chenyoumei/p/9488596.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/chenyoumei/p/9488596.html" title="发布于 2018-08-16 17:24">js获取用户当前地理位置（省、市、经纬度）</a>
+    <br>
+    <a href="https://www.cnblogs.com/chenyoumei/p/11685833.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/chenyoumei/p/11685833.html" title="发布于 2019-10-16 15:35">微信小程序遮罩层覆盖input失效</a>
+
+</div>
+</div>
+            </div>
+            <div class="itemdesc">
+                发表于 
+<span id="post-date">2019-03-11 14:16</span>&nbsp;
+<a href="https://www.cnblogs.com/chenyoumei/">陈由梅</a>&nbsp;
+阅读(<span id="post_view_count">14302</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=10510321" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(10510321);return false;">收藏</a>
+            </div>
+        </div>
+        <div class="seperator">&nbsp;</div>
+    </div>
+</div>
+
+
+<script src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/highlight.min.js.下载"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 376906, cb_blogApp = 'chenyoumei', cb_blogUserGuid = 'ec9b62e4-124c-4b4b-9905-08d49c352df3';
+    var cb_entryId = 10510321, cb_entryCreatedDate = '2019-03-11 14:16', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/chenyoumei/p/10510321.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/chenyoumei/p/10510321.html#top">返回顶部</a></div>
+    <div id="comment_form_container" style="visibility: visible;"><div class="login_tips">
+    登录后才能查看或发表评论，立即 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return account.login(&#39;!comments&#39;);">登录</a> 或者
+    <a href="https://www.cnblogs.com/">逛逛</a> 博客园首页
+</div>
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="https://developer.aliyun.com/learning/trainingcamp/cassandra/1?utm_content=g_1000240877" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云-cassandra&#39;)">【推荐】深入Cassandra实战营，七天玩转支持SQL的海量扩展数据库训练营</a><br><a href="https://brands.cnblogs.com/huawei" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为专区&#39;)">【推荐】HarmonyOS 开发者日， 4.17上海站约起， 报名赢定制礼！</a><br><a href="http://www.uccpsoft.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-ucancode&#39;)">【推荐】大型组态、工控、仿真、CAD\GIS 50万行VC++源码免费下载!</a><br><a href="http://www.moojnn.com/?source=bokeyuan" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-魔镜&#39;)">【推荐】限时秒杀！国云大数据魔镜，企业级云分析平台</a><br></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id="div-gpt-ad-1592365906576-0" style="width: 300px; height: 250px;" data-google-query-id="COm6q-rT_O8CFe3VfAodUhoHnw"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" allow="conversion-measurement &#39;src&#39;" data-google-container-id="1" style="border: 0px; vertical-align: bottom;" data-load-complete="true" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_card1"><div class="under-post-card"><b>园子动态</b>：<br>· <a href="https://www.cnblogs.com/cmt/p/14585828.html" target="_blank">致园友们的一封检讨书：都是我们的错</a><br>· <a href="https://www.cnblogs.com/cmt/p/14595262.html" target="_blank">数据库实例 CPU 100% 引发全站故障</a><br>· <a href="https://www.cnblogs.com/cmt/p/14217355.html" target="_blank">发起一个开源项目：博客引擎 fluss</a><br></div></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id="div-gpt-ad-1592366332455-0" style="width: 468px; height: 60px;" data-google-query-id="COq6q-rT_O8CFe3VfAodUhoHnw"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" allow="conversion-measurement &#39;src&#39;" data-google-container-id="2" style="border: 0px; vertical-align: bottom;" data-load-complete="true" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+    </div>
+    <div id="under_post_card2"><div class="itnews under-post-card">
+    <b>最新新闻</b>：
+    <br>
+ ·          <a href="https://news.cnblogs.com/n/690997/" target="_blank">26.5万元起！福特首款纯电动车上市，比亚迪电池，与蔚来合作</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/690994/" target="_blank">NASA火星直升机首飞再被推迟，下周确定新日期</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/690995/" target="_blank">韩国劳动部长：韩国人必须学会如何与机器一起工作</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/690996/" target="_blank">美股周二科技股领涨：特斯拉涨8.6%，市值再超7000亿美元</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/690993/" target="_blank">Coinbase设定直接上市参考价250美元 估值653亿美元</a>
+        <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody></table>
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjshgj8vQfJgnsIUQavMpFKzeeR5XUm8ycOTNGwyStjmYX9tHjUcL6U6RrmflxNmQQyIgRIGECbYWgUiY-9mjEY5GiSJc1mVR7mULxhZMc8JycsLq54C_3KrldcFESXsdqE">
+
+
+<iframe id="google_osd_static_frame_6561840916089" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./移动端屏幕宽度自适应原理及实现 - 陈由梅 - 博客园_files/saved_resource(2).html"></iframe></body></html>
